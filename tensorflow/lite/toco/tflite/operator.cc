@@ -1543,6 +1543,8 @@ std::vector<std::unique_ptr<BaseOperator>> BuildOperatorList(
       MakeUnique<SimpleOperator<Relu6Operator>>("RELU6", OperatorType::kRelu6));
   ops.push_back(
       MakeUnique<SimpleOperator<PReluOperator>>("PRELU", OperatorType::kPRelu));
+  ops.push_back(
+      MakeUnique<SimpleOperator<LeakyReluOperator>>("LEAKYRELU", OperatorType::kLeakyRelu));
   ops.push_back(MakeUnique<SimpleOperator<LogisticOperator>>(
       "LOGISTIC", OperatorType::kLogistic));
   ops.push_back(

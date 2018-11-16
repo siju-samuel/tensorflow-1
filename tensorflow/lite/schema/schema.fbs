@@ -200,6 +200,7 @@ enum BuiltinOperator : byte {
   FLOOR_MOD = 95,
   RANGE = 96,
   RESIZE_NEAREST_NEIGHBOR = 97,
+  LEAKYRELU = 98,
 }
 
 // Options for the builtin operators.

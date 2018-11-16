@@ -166,6 +166,7 @@ class OpOptionData {
     op_to_option_["CUSTOM"] = "";    // TODO(aselle): maybe something else.
     op_to_option_["DELEGATE"] = "";  // TODO(aselle): maybe something else.
     op_to_option_["PRELU"] = "";
+    op_to_option_["LEAKYRELU"] = "";
     op_to_option_["MAXIMUM"] = "";  // TODO(aselle): MaximumMinimumOptions
     op_to_option_["MINIMUM"] = "";  // TODO(aselle): MaximumMinimumOptions
     op_to_option_["SIN"] = "";

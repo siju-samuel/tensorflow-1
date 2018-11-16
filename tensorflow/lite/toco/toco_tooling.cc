@@ -105,6 +105,7 @@ void MakeGeneralGraphTransformationsSet(
   transformations->Add(new IdentifyL2Pool);
   transformations->Add(new IdentifyRelu1);
   transformations->Add(new IdentifyPRelu);
+  transformations->Add(new IdentifyLeakyRelu);
   transformations->Add(new RemoveTrivialBinaryOperator);
   transformations->Add(new ResolveFakeQuantArgsFromVars);
   transformations->Add(new ReadArrayMinmaxAndNarrowRangeFromFakeQuant);

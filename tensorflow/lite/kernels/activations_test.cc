@@ -606,6 +606,46 @@ TEST(FloatActivationsOpTest, PRelu) {
                              }));
 }
 
+class LeakyReluOpModel : public SingleOpModel {
+ public:
+  LeakyReluOpModel(const TensorData& input, const float alpha) {
+    input_ = AddInput(input);
+    output_ = AddOutput(input);
+    SetBuiltinOp(BuiltinOperator_LEAKYRELU,
+                 BuiltinOptions_LeakyReluOptions,
+                 CreateLeakyReluOptions(builder_, alpha)
+                     .Union());
+    BuildInterpreter({GetShape(input_)});
+  }
+  void SetInput(std::initializer_list<float> data) {
+    PopulateTensor(input_, data);
+  }
+  std::vector<float> GetOutput() { return ExtractVector<float>(output_); }
+
+ protected:
+  int input_;
+  int output_;
+};
+
+
+TEST(FloatActivationsOpTest, LeakyRelu) {
+  LeakyReluOpModel m({TensorType_FLOAT32, {1, 2, 2, 3}}, /*alpha=*/0.1);
+
+  m.SetInput({
+      0.0f, 0.0f, 0.0f,     // Row 1, Column 1
+      1.0f, 1.0f, 1.0f,     // Row 1, Column 2
+      -1.0f, -1.0f, -1.0f,  // Row 2, Column 1
+      -2.0f, -2.0f, -2.0f,  // Row 1, Column 2
+  });
+  m.Invoke();
+  EXPECT_THAT(m.GetOutput(), ElementsAreArray({
+                                 0.0f, 0.0f, 0.0f,    // Row 1, Column 1
+                                 1.0f, 1.0f, 1.0f,    // Row 1, Column 2
+                                 -0.1f, -0.1f, -0.1f,  // Row 2, Column 1
+                                 -0.2f, -0.2f, -0.2f,  // Row 1, Column 2
+                             }));
+}
+
 }  // namespace
 }  // namespace tflite
 

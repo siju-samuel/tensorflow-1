@@ -641,6 +641,7 @@ TfLiteStatus AddOpsAndParams(
       case tflite::BuiltinOperator_DELEGATE:
       case tflite::BuiltinOperator_CAST:
       case tflite::BuiltinOperator_PRELU:
+      case tflite::BuiltinOperator_LEAKYRELU:
       case tflite::BuiltinOperator_MAXIMUM:
       case tflite::BuiltinOperator_MINIMUM:
       case tflite::BuiltinOperator_ARG_MAX:

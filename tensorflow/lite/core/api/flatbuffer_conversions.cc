@@ -617,6 +617,15 @@ TfLiteStatus ParseOpData(const Operator* op, BuiltinOperator op_type,
       *builtin_data = reinterpret_cast<void*>(params);
       break;
     }
+    case BuiltinOperator_LEAKYRELU: {
+      auto* params = allocator->AllocatePOD<TfLiteLeakyReluParams>();
+      if (auto* schema_params =
+              op->builtin_options_as_LeakyReluOptions()) {
+        params->alpha = schema_params->alpha();
+      }
+      *builtin_data = reinterpret_cast<void*>(params);
+      break;
+    }
 
     // Below are the ops with no builtin_data strcture.
     case BuiltinOperator_BATCH_TO_SPACE_ND:

@@ -73,6 +73,7 @@ enum class OperatorType : uint8 {
   kRelu1,
   kRelu6,
   kPRelu,
+  kLeakyRelu,
   kSoftmax,
   kLogSoftmax,
   kSub,
@@ -697,6 +698,18 @@ struct Relu6Operator : Operator {
 // Equivalent to keras.layers.PReLU.
 struct PReluOperator : Operator {
   PReluOperator() : Operator(OperatorType::kPRelu) {}
+};
+
+// LeakyRelu
+//   f(x) = alpha * x for x < 0, f(x) = x for x >= 0.
+//
+// Inputs:
+//   inputs[0]: required: the input array
+//
+// Equivalent to keras.layers.LeakyReLU.
+struct LeakyReluOperator : Operator {
+  LeakyReluOperator() : Operator(OperatorType::kLeakyRelu) {}
+  float alpha = 0.0f;
 };
 
 // Element-wise Logistic operator:

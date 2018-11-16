@@ -663,6 +663,32 @@ TfLiteStatus PreluEval(TfLiteContext* context, TfLiteNode* node) {
   return kTfLiteOk;
 }
 
+template <typename T>
+T ApplyLeakyRelu(T input, T alpha) {
+  return input >= 0.0 ? input : input * alpha;
+}
+
+TfLiteStatus LeakyReluEval(TfLiteContext* context, TfLiteNode* node) {
+  auto* params = reinterpret_cast<TfLiteLeakyReluParams*>(node->builtin_data);
+  const TfLiteTensor* input = GetInput(context, node, 0);
+  TfLiteTensor* output = GetOutput(context, node, 0);
+  switch (input->type) {
+    case kTfLiteFloat32: {
+      size_t elements = input->bytes / sizeof(float);
+      float* in = input->data.f;
+      float* in_end = in + elements;
+      float* out = output->data.f;
+      float alpha = params->alpha;
+      for (; in < in_end; in++, out++) *out = ApplyLeakyRelu<float>(*in, alpha);
+      return kTfLiteOk;
+    } break;
+    default:
+      context->ReportError(context, "Only float32 supported currently, got %d.",
+                           input->type);
+      return kTfLiteError;
+  }
+}
+
 }  // namespace activations
 
 TfLiteRegistration* Register_RELU() {
@@ -718,6 +744,13 @@ TfLiteRegistration* Register_PRELU() {
   static TfLiteRegistration r = {/*init=*/nullptr, /*free=*/nullptr,
                                  activations::PreluPrepare,
                                  activations::PreluEval};
+  return &r;
+}
+
+TfLiteRegistration* Register_LEAKYRELU() {
+  static TfLiteRegistration r = {/*init=*/nullptr, /*free=*/nullptr,
+                                 activations::GenericPrepare,
+                                 activations::LeakyReluEval};
   return &r;
 }
 
